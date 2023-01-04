@@ -1,13 +1,15 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import FooterHome from "../Components/FooterHome/FooterHome";
+import HeaderHome from "../Components/HeaderHome/HeaderHome";
 export const HomeTemplate = () => {
   return (
     <>
-      <header className="bg-dark text-white text-center p-3">header</header>
+    <HeaderHome/>
       <div style={{ minHeight: "75vh" }}>
         <Outlet />
       </div>
-      <footer className="bg-dark text-white text-center p-3">footer</footer>
+    <FooterHome/>
     </>
   );
 };
