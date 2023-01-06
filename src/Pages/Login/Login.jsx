@@ -4,6 +4,7 @@ import * as yup from 'yup'
 import { loginApi } from '../../redux/reducers/userReducer';
 import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom'
+import FacebookLogin from 'react-facebook-login'
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -41,6 +42,13 @@ const Login = () => {
           <NavLink to="/register" className="active registerNow">Register now ?</NavLink>
 
           <button className='btn btn-success mt-2 btnLogin' type='submit'>LOGIN</button>
+        </div>
+        <div className='d-flex justify-content-center mt-3'>
+          <FacebookLogin
+            appId="405558278438475"
+            autoLoad={true}
+            fields="name,email,picture"
+          />,
         </div>
       </form></>
 
