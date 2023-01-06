@@ -2,10 +2,9 @@ import axios from 'axios';
 import { history } from '../index';
 import { isExpired, decodeToken } from "react-jwt";
 
-export const ACCESS_TOKEN = 'accessToken';
-export const USER_LOGIN = 'userLogin';
 
-export const { saveStore, saveStoreJson, getStore, getStoreJson, removeStore, getStoreJSON, setCookie, getCookie, clearCookie, clearLocalStorage } = {
+
+export const confgis = {
     saveStore: (name, values) => {
         localStorage.setItem(name, values);
     },
@@ -68,24 +67,26 @@ export const { saveStore, saveStoreJson, getStore, getStoreJson, removeStore, ge
         localStorage.removeItem(name);
     },
     ACCESS_TOKEN: 'accessToken',
-    USER_LOGIN: 'userLogin'
+    USER_LOGIN: 'userLogin',
 }
-
+export const { USER_LOGIN, ACCESS_TOKEN, saveStore, saveStoreJson, getStore, getStoreJson, removeStore, getStoreJSON, setCookie, getCookie, clearCookie, clearLocalStorage } = confgis;
 const TOKEN_CYBERSOFT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJGcm9udGVuZCA3MyIsIkhldEhhblN0cmluZyI6IjE5LzA1LzIwMjMiLCJIZXRIYW5UaW1lIjoiMTY4NDQ1NDQwMDAwMCIsIm5iZiI6MTY1OTg5MTYwMCwiZXhwIjoxNjg0NjAyMDAwfQ.49m9-EoDr6zr7UOk_79hfcvJWKI_s0Wy_g40ossfl9c';
 //Cấu hình cho tất các request api
 
 export const http = axios.create({
     baseURL: 'https://shop.cyberlearn.vn',
-    timeout: 30000
+    timeout: 60000
 })
 
-http.interceptors.request.use((config) => {
-    config.headers = {
-        ...config.headers,
-        Authorization: `Bearer ${getStore(ACCESS_TOKEN)}`,
-        TokenCybersoft: TOKEN_CYBERSOFT
-    };
-    return config;
+http.interceptors.request.use((configs) => {
+    //Cấu hình tất cả header add thêm thuộc tính Authorization
+    configs.headers = {
+        ...configs.headers,
+        ['Authorization']: `Bearer ${getStore(ACCESS_TOKEN)}`,
+        ['TokenCybersoft']: TOKEN_CYBERSOFT
+    }
+
+    return configs;
 }, (err) => {
     return Promise.reject(err);
 })
@@ -94,8 +95,8 @@ http.interceptors.request.use((config) => {
 //     baseURL:'https://shop2.cyberlearn.vn'
 // })
 //Cấu hình cho tất cả các response api
-http.interceptors.response.use((res) => {
-    return res;
+http.interceptors.response.use((response) => {
+    return response;
 }, (err) => {
     //Bắt lỗi 400 hoặc 404
     if (err.response.status === 400 || err.response.status === 404) {
@@ -103,6 +104,7 @@ http.interceptors.response.use((res) => {
         alert('Tài khoản không hợp lệ! Yêu cầu đăng nhập lại!');
         //chuyển hướng về home
         history.push('/');
+        return Promise.reject(err);
     }
     if (err.response?.status === 401 || err.response.status == 403) {
         const isMyTokenExpired = isExpired(getStore(ACCESS_TOKEN));
@@ -114,6 +116,7 @@ http.interceptors.response.use((res) => {
             window.location.href = '/login';
         }
         history.push('/login');
+        return Promise.reject(err);
     }
     return Promise.reject(err);
 })

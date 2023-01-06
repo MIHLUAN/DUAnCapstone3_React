@@ -81,13 +81,13 @@ export const getOrderApiAction = () => {
   return async (dispatch) => {
     try {
       // call api
-      let result = await http.post("/Users/order", getStoreJSON(USER_LOGIN));
+      let result = await http.post("/api/Users/order", getStoreJSON(USER_LOGIN));
 
       console.log("result", result.data.content);
 
       dispatch(setOrderDetailAction(result.data.content));
     } catch (err) {
-      console.log(err);
+      console.log('a', err);
       alert("Vui lòng đăng nhập để vào trang này!");
       history.push("/login");
     }
