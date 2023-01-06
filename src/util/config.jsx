@@ -5,27 +5,24 @@ import { isExpired, decodeToken } from "react-jwt";
 export const ACCESS_TOKEN = 'accessToken';
 export const USER_LOGIN = 'userLogin';
 
-export const { saveStore, saveStoreJson, getStore, getStoreJson, removeStore, getStoreJSON } = {
-    saveStore: (name, stringValue) => {
-        localStorage.setItem(name, stringValue);
-        return stringValue;
+export const { saveStore, saveStoreJson, getStore, getStoreJson, removeStore, getStoreJSON, setCookie, getCookie, clearCookie, clearLocalStorage } = {
+    saveStore: (name, values) => {
+        localStorage.setItem(name, values);
     },
-    saveStoreJson: (name, value) => {
-        let sValue = JSON.stringify(value);
-        localStorage.setItem(name, sValue);
-        return value; //object
+    saveStoreJson: (name, values) => {
+        //Biến thành chuỗi
+        values = JSON.stringify(values);
+        //Lưu vào store
+        localStorage.setItem(name, values);
     },
     getStore: (name) => {
-        if (localStorage.getItem(name)) {
-            return localStorage.getItem(name);
-        }
-        return null;
+        return localStorage.getItem(name);
     },
     getStoreJson: (name) => {
         if (localStorage.getItem(name)) {
             return JSON.parse(localStorage.getItem(name));
         }
-        return null
+        return null;
     },
     removeStore: (name) => {
         if (localStorage.getItem(name)) {
@@ -45,6 +42,33 @@ export const { saveStore, saveStoreJson, getStore, getStoreJson, removeStore, ge
         }
         return null;
     },
+    setCookie: (value, days, name) => {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    },
+    getCookie: (name) => {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    },
+    clearCookie: (name) => {
+        setCookie('', -1, name);
+    },
+    clearLocalStorage: (name) => {
+        localStorage.removeItem(name);
+    },
+    ACCESS_TOKEN: 'accessToken',
+    USER_LOGIN: 'userLogin'
 }
 
 const TOKEN_CYBERSOFT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJGcm9udGVuZCA3MyIsIkhldEhhblN0cmluZyI6IjE5LzA1LzIwMjMiLCJIZXRIYW5UaW1lIjoiMTY4NDQ1NDQwMDAwMCIsIm5iZiI6MTY1OTg5MTYwMCwiZXhwIjoxNjg0NjAyMDAwfQ.49m9-EoDr6zr7UOk_79hfcvJWKI_s0Wy_g40ossfl9c';
@@ -74,7 +98,7 @@ http.interceptors.response.use((res) => {
     return res;
 }, (err) => {
     //Bắt lỗi 400 hoặc 404
-    if (err.response?.status === 400 || err.response?.status === 404) {
+    if (err.response.status === 400 || err.response.status === 404) {
         //Lỗi do tham số => backend trả về 400 hoặc 404 mình sẽ xử lý
         alert('Tài khoản không hợp lệ! Yêu cầu đăng nhập lại!');
         //chuyển hướng về home

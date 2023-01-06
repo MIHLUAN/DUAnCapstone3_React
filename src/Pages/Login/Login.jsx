@@ -3,8 +3,12 @@ import { useFormik } from 'formik';
 import * as yup from 'yup'
 import { loginApi } from '../../redux/reducers/userReducer';
 import { useDispatch } from 'react-redux';
-import { NavLink } from 'react-router-dom'
-import FacebookLogin from 'react-facebook-login'
+import { NavLink } from 'react-router-dom';
+import FacebookLogin from 'react-facebook-login';
+
+const responseFacebook = (response) => {
+  console.log(response);
+}
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -43,11 +47,12 @@ const Login = () => {
 
           <button className='btn btn-success mt-2 btnLogin' type='submit'>LOGIN</button>
         </div>
-        <div className='d-flex justify-content-center mt-3'>
+        <div className='mt-3 d-flex justify-content-center'>
           <FacebookLogin
-            appId="405558278438475"
+            appId=""
             autoLoad={true}
             fields="name,email,picture"
+            callback={responseFacebook}
           />,
         </div>
       </form></>
