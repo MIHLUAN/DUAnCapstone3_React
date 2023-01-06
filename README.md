@@ -2,9 +2,6 @@
  Báo cáo Capstone
  <-------------->
  -Nhóm:Hà Nguyễn Minh Luân + Huỳnh Minh Thuận
- -Link deploy :
- -Link github:
- -Link youtube:
  -Phân công việc nhóm:
  *Huỳnh Minh Thuận
  -Các Phần:
