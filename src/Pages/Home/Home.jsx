@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import Product from '../../components/Product/Product'
+import Product from '../../Components/Product/Product'
 import { getProductApi } from '../../redux/reducers/productReducer';
 import Carousel_Home from './Carousel_Home';
 export default function Home() {

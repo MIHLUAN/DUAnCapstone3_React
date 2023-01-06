@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { getProductByKwdApiAction } from "../../redux/reducers/productReducer";
-import Product from "../../components/Product/Product";
+import Product from "../../Components/Product/Product";
 import _ from "lodash";
 
 let timeout = null;

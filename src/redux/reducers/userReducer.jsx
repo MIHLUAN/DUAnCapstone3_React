@@ -7,7 +7,7 @@ import { ACCESS_TOKEN, getStore, getStoreJson, http, saveStore, saveStoreJson, U
 const initialState = {
     userLogin: getStoreJson(USER_LOGIN),
     userProfile: null,
-    userRegister:null
+    userRegister: null
 }
 
 const userReducer = createSlice({
@@ -17,16 +17,19 @@ const userReducer = createSlice({
         loginAction: (state, action) => {
             state.userLogin = action.payload;
         },
-        getProfileAction: (state,action) => {
+        getProfileAction: (state, action) => {
             state.userProfile = action.payload
         },
-        registerAction:(state,action)=>{
-            state.userRegister=action.payload
-        }
+        registerAction: (state, action) => {
+            state.userRegister = action.payload
+        },
+        updateProfileAction: (state, action) => {
+            state.userUpdateProfile = action.payload
+        },
     }
 });
 
-export const { loginAction,getProfileAction,registerAction } = userReducer.actions
+export const { loginAction, getProfileAction, registerAction, updateProfileAction } = userReducer.actions
 
 export default userReducer.reducer
 
@@ -34,7 +37,7 @@ export default userReducer.reducer
 //userLogin = {email,password}
 export const loginApi = (userLogin) => {
     return async dispatch => {
-        const result = await http.post('/api/Users/signin',userLogin);
+        const result = await http.post('/api/Users/signin', userLogin);
         console.log('obDangNhap', result.data.content);
         //Cập nhật cho reducer
         const action = loginAction(result.data.content);
@@ -51,9 +54,9 @@ export const loginApi = (userLogin) => {
     }
 }
 
-export const registerApi=(userRegister)=>{
-    return async dispatch=>{
-        const result=await http.post('/api/Users/signup',userRegister)
+export const registerApi = (userRegister) => {
+    return async dispatch => {
+        const result = await http.post('/api/Users/signup', userRegister)
         console.log('obDangKy', result.data);
         const action = registerAction(result.data.content);
         dispatch(action);
@@ -68,5 +71,15 @@ export const getProfileApi = () => {
         dispatch(action);
 
 
+    }
+}
+export const updateProfileApi = (userRegister) => {
+    return async dispatch => {
+        const result = await http.post('/api/Users/updateProfile', userRegister)
+        console.log('obUpdateProfile', result.data);
+        const action = updateProfileAction(result.data.content);
+        dispatch(action);
+        alert('Update thanh cong!')
+        history.push('/profile');
     }
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import Product from "../../components/Product/Product";
+import Product from "../../Components/Product/Product";
 
 export default function RelatedProducts({ relatedProducts }) {
   return (
