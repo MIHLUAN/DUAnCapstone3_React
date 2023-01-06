@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { Radio } from "antd";
+import moment from 'moment';
 import {
   getProfileApi,
   updateProfileApi,
@@ -13,6 +14,7 @@ import * as yup from "yup";
 
 const Profile = () => {
   const { userProfile } = useSelector((state) => state.userReducer);
+  const { userLogin } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
   useEffect(() => {
     const actionAsync = getProfileApi();
@@ -68,39 +70,43 @@ const Profile = () => {
       );
     });
   };
-  const renderCartTbl = (e) => {
-    const rows = [];
-    for (const i in e) {
-      rows.push(e[i]);
-    }
-    // console.log(rows)
-
-    return rows.map((prod, index) => {
-      if (prod.orderDetail.length !== 0)
-        // console.log(prod)
-        return (
-          <>
-            <div className="text-danger">
-              +Oder have been placed on{prod.date}
-            </div>
-            <table
-              key={index}
-              className="table table-borderless carts__content mt-2"
-            >
-              <thead>
-                <tr>
-                  <td>id</td>
-                  <td>img</td>
-                  <td>name</td>
-                  <td>price</td>
-                  <td>quantity</td>
-                  <td>total</td>
-                </tr>
-              </thead>
-              <tbody>{renderCartDetail(prod.orderDetail, prod.id)}</tbody>
-            </table>
-          </>
-        );
+  const renderOrderHistory = () => {
+    return userLogin?.ordersHistory?.map((order, index) => {
+      return (
+        <div className="orderDetail" key={index}>
+          <p>
+            Order has been placed on {moment(order?.date).format("DD/MM/YYYY")}
+          </p>
+          <table className="table table-borderless carts-content">
+            <thead style={{ background: "#ccc" }}>
+              <tr>
+                <td>id</td>
+                <td>name</td>
+                <td>img</td>
+                <td>price</td>
+                <td>quantity</td>
+                <td>total</td>
+              </tr>
+            </thead>
+            <tbody>
+              {order.orderDetail.map((item, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{item.id}</td>
+                    <td>{item.name}</td>
+                    <td>
+                      <img src={item.image} width={50} alt="..." />
+                    </td>
+                    <td>{item.price}</td>
+                    <td>{item.quantity}</td>
+                    <td>{item.price * item.quantity}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      );
     });
   };
   return (
@@ -230,7 +236,7 @@ const Profile = () => {
         <h2 className="text-danger">Order history </h2>
         <hr />
 
-        {renderCartTbl(userProfile?.ordersHistory)}
+        {renderOrderHistory()}
       </div>
     </>
   );
