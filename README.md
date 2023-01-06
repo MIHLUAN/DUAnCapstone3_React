@@ -6,10 +6,10 @@
  -Link github:
  -Link youtube:
  -Phân công việc nhóm:
- *Hà Nguyễn Minh Luân
+ *Huỳnh Minh Thuận
  -Các Phần:
     +Nội dung trang: Carts, Search, Home, Detail
- *Huỳnh Minh Thuận
+ *Hà Nguyễn Minh Luân
   -Các Phần:
     +Nội dung trang: Login,Profile,Register
 
