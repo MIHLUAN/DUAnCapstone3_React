@@ -71,7 +71,7 @@ const Profile = () => {
     });
   };
   const renderOrderHistory = () => {
-    return userLogin?.ordersHistory?.map((order, index) => {
+    return userProfile?.ordersHistory?.map((order, index) => {
       return (
         <div className="orderDetail" key={index}>
           <p>
